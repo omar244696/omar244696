@@ -9,18 +9,30 @@ public class code : MonoBehaviour
           public KeyCode Spacebar;
            public KeyCode R;
                public KeyCode L;
+
+            public Transform groundCheck;
+public float groundCheckRadius;
+public LayerMask whatIsGround;
+private bool grounded;
+private Animator anim;
+
     
     // Start is called before the first frame update
     void Start()
     {
-
+ anim= GetComponent<Animator>();
     }
 
     // Update is called once per frame
+    void FixedUpdate()
+{
+    grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+}
+
     void Update()
     {
         
-    if(Input.GetKeyDown(Spacebar))
+    if(Input.GetKeyDown(Spacebar) && grounded)
     {
         Jump();
     }
@@ -41,6 +53,12 @@ public class code : MonoBehaviour
                 GetComponent<SpriteRenderer>().flipX =false;
 
     }
+
+  anim.SetFloat("speed",Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x));
+ 
+    anim.SetFloat("Height", GetComponent<Rigidbody2D>().velocity.y);
+
+   anim.SetBool("Grounded", grounded);
 }
 
 void Jump()
@@ -48,5 +66,9 @@ void Jump()
     GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
 }
 
+
+   
     }
+
+
 
